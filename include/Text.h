@@ -13,17 +13,35 @@
 
 class Text{
 public:
-    Text(class Game* game, const std::string& text, const std::string& fontName, int size, const SDL_Color& color);
+    Text(
+        class Game* game, 
+        const std::string& text, 
+        const std::string& fontName, int ptsize, 
+        const SDL_Color& color,
+        int x = 360, int y = 20
+    );
+    ~Text();
+
     void Update(float deltaTime);
-    void Draw(SDL_Renderer* renderer, int x, int y);
+    void Draw(SDL_Renderer* renderer);
 
 private:
     class Game* mGame;
     std::string mTextTyped;
     std::string mTextRest;
     SDL_Texture* mTexture;
+
+    // Position informations
     int mWidth;
     int mHeight;
+    int mPosX;
+    int mPosY;
+    float mSpeedX;
+    float mSpeedY;
+
+    // Attribute to check if the text is dead
+    bool mDead;
+
 };
 
 #endif /* Text_h */

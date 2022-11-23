@@ -23,7 +23,7 @@ public:
     void RunLoop();
     void Shutdown();
  
-    SDL_Texture* GetTexture(const std::string& fileName);
+    // SDL_Texture* GetTexture(const std::string& fileName);
     TTF_Font* GetFont(const std::string& fontFileName, int ptsize);
     SDL_Texture* GetTextureFromSurface(SDL_Surface* surf);
 
@@ -34,15 +34,14 @@ private:
     void LoadData();
     void UnloadData();
 
-    // Map of textures loaded
-    std::unordered_map<std::string, SDL_Texture*> mTextures;
+    // Map of fonts loaded
+    // std::unordered_map<std::string, SDL_Texture*> mTextures;
     std::unordered_map<std::string, TTF_Font*> mFonts;
 
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;
     bool mIsRunning;
     Uint32 mTicksCount;
-    // Track if updating actors
     
     class Text* mText;
 

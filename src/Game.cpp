@@ -119,7 +119,7 @@ void Game::GenerateOutput(){
     SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(mRenderer);
     
-    mText->Draw(mRenderer, 480, 360);
+    mText->Draw(mRenderer);
     SDL_RenderPresent(mRenderer);
 }
 
@@ -127,53 +127,53 @@ void Game::LoadData(){
     // Create the player
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
     SDL_Color black = { 0x00, 0x00, 0x00, 0 };
-    mText = new Text(this, "Key Down!", "mincho.ttc", 24, { 0xFF, 0xFF, 0xFF, 0 });
+    mText = new Text(this, "Windows XP", "mincho.ttc", 24, { 0xFF, 0xFF, 0xFF, 0 });
 }
 
 void Game::UnloadData(){
-    for (auto i: mTextures){
-        SDL_DestroyTexture(i.second);
-    }
-    mTextures.clear();
+    // for (auto i: mTextures){
+    //     SDL_DestroyTexture(i.second);
+    // }
+    // mTextures.clear();
     for (auto i: mFonts){
         TTF_CloseFont(i.second);
     }
     mFonts.clear();
 }
 
-SDL_Texture* Game::GetTexture(const std::string& fileName){
-    SDL_Texture* tex = nullptr;
-    // Is the texture alread in the map?
-    auto iter = mTextures.find(fileName);
-    if(iter != mTextures.end()){
-        tex = iter->second;
-    } else{
-        // Load from file
-        SDL_Surface* surf = IMG_Load(fileName.c_str());
-        if (!surf){
-            SDL_Log("Failed to load texture file %s", fileName.c_str());
-            return nullptr;
-        }
+// SDL_Texture* Game::GetTexture(const std::string& fileName){
+//     SDL_Texture* tex = nullptr;
+//     // Is the texture alread in the map?
+//     auto iter = mTextures.find(fileName);
+//     if(iter != mTextures.end()){
+//         tex = iter->second;
+//     } else{
+//         // Load from file
+//         SDL_Surface* surf = IMG_Load(fileName.c_str());
+//         if (!surf){
+//             SDL_Log("Failed to load texture file %s", fileName.c_str());
+//             return nullptr;
+//         }
 
-        //Create texture from surface
-        tex = SDL_CreateTextureFromSurface(mRenderer, surf);
-        SDL_FreeSurface(surf);
-        if (!tex){
-            SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
-            return nullptr;
-        }
+//         //Create texture from surface
+//         tex = SDL_CreateTextureFromSurface(mRenderer, surf);
+//         SDL_FreeSurface(surf);
+//         if (!tex){
+//             SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
+//             return nullptr;
+//         }
 
-        // Add to map
-        mTextures.emplace(fileName.c_str(), tex);
-    }
-    return tex;
-}
+//         // Add to map
+//         mTextures.emplace(fileName.c_str(), tex);
+//     }
+//     return tex;
+// }
 
 TTF_Font* Game::GetFont(const std::string& fontName, int ptsize){
     TTF_Font* font = nullptr;
-    // Is the font alread in the map?
     std::string fontFileName = "res/Fonts/" + fontName;
     auto iter = mFonts.find(fontFileName);
+    // If already in the map, no need to load
     if(iter != mFonts.end()){
         font = iter->second;
         TTF_SetFontSize(font, ptsize);

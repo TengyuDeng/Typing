@@ -12,11 +12,17 @@
 #include <SDL2/SDL_ttf.h>
 
 
-Text::Text(class Game* game, const std::string& text, const std::string& fontName, int ptsize, const SDL_Color& color)
-:mGame(game),
+Text::Text(
+    class Game* game, 
+    const std::string& text, 
+    const std::string& fontName, int ptsize, 
+    const SDL_Color& color,
+    int x, int y
+):mGame(game),
 mTextTyped(""),
-mTextRest(text)
-{
+mTextRest(text),
+mPosX(x), mPosY(y),
+mSpeedX(360.0f), mSpeedY(360.0f){
     TTF_Font* font = mGame->GetFont(fontName, ptsize);
 
     SDL_Surface* surf = TTF_RenderText_Solid(font, text.c_str(), color);
@@ -29,16 +35,27 @@ mTextRest(text)
     SDL_QueryTexture(mTexture, NULL, NULL, &mWidth, &mHeight);
 }
 
-void Text::Update(float deltaTime){
-
+Text::~Text(){
+    SDL_DestroyTexture(mTexture);
 }
 
-void Text::Draw(SDL_Renderer* renderer, int x, int y){
+void Text::Update(float deltaTime){
+    mPosX += static_cast<int>(mSpeedX * deltaTime);
+    if (mPosX < 0 || mPosX > 960 - mWidth){
+        mSpeedX *= -1;
+    }
+    mPosY += static_cast<int>(mSpeedY * deltaTime);
+    if (mPosY < 0 || mPosY > 720 - mHeight){
+        mDead = true;
+    }
+}
+
+void Text::Draw(SDL_Renderer* renderer){
     // SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     // SDL_RenderClear(renderer);
     SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
+    dest.x = mPosX;
+    dest.y = mPosY;
     dest.w = mWidth;
     dest.h = mHeight;
     SDL_RenderCopy(renderer, mTexture, NULL, &dest);
