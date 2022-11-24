@@ -15,8 +15,7 @@
 #include <vector>
 #include <string>
 
-class Game
-{
+class Game{
 public:
     Game();
     bool Initialize();

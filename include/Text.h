@@ -10,6 +10,7 @@
 #define Text_h
 #include <SDL2/SDL.h>
 #include <string>
+#include "MathUtils.h"
 
 class Text{
 public:
@@ -32,12 +33,14 @@ private:
     SDL_Texture* mTexture;
 
     // Position informations
-    int mWidth;
-    int mHeight;
-    int mPosX;
-    int mPosY;
-    float mSpeedX;
-    float mSpeedY;
+    SDL_Rect mRect;
+    Vector2D mSpeed;
+    // int mWidth;
+    // int mHeight;
+    // int mPosX;
+    // int mPosY;
+    // float mSpeedX;
+    // float mSpeedY;
 
     // Attribute to check if the text is dead
     bool mDead;

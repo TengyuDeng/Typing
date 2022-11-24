@@ -21,8 +21,8 @@ Text::Text(
 ):mGame(game),
 mTextTyped(""),
 mTextRest(text),
-mPosX(x), mPosY(y),
-mSpeedX(360.0f), mSpeedY(360.0f){
+mRect({x, y, 0, 0}),
+mSpeed(180.0f, 180.0f){
     TTF_Font* font = mGame->GetFont(fontName, ptsize);
 
     SDL_Surface* surf = TTF_RenderText_Solid(font, text.c_str(), color);
@@ -32,7 +32,7 @@ mSpeedX(360.0f), mSpeedY(360.0f){
         return;
     }
     mTexture = mGame->GetTextureFromSurface(surf);
-    SDL_QueryTexture(mTexture, NULL, NULL, &mWidth, &mHeight);
+    SDL_QueryTexture(mTexture, NULL, NULL, &mRect.w, &mRect.h);
 }
 
 Text::~Text(){
@@ -40,25 +40,22 @@ Text::~Text(){
 }
 
 void Text::Update(float deltaTime){
-    mPosX += static_cast<int>(mSpeedX * deltaTime);
-    if (mPosX < 0 || mPosX > 960 - mWidth){
-        mSpeedX *= -1;
+    mRect.x += static_cast<int>(mSpeed.x * deltaTime);
+    if (mRect.x < 0 || mRect.x > 960 - mRect.w){
+        mSpeed.x *= -1;
     }
-    mPosY += static_cast<int>(mSpeedY * deltaTime);
-    if (mPosY < 0 || mPosY > 720 - mHeight){
-        mDead = true;
+    mRect.y += static_cast<int>(mSpeed.y * deltaTime);
+    if (mRect.y < 0 || mRect.y > 720 - mRect.h){
+        mSpeed.y *= -1;
+        // mDead = true;
     }
 }
 
 void Text::Draw(SDL_Renderer* renderer){
     // SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     // SDL_RenderClear(renderer);
-    SDL_Rect dest;
-    dest.x = mPosX;
-    dest.y = mPosY;
-    dest.w = mWidth;
-    dest.h = mHeight;
-    SDL_RenderCopy(renderer, mTexture, NULL, &dest);
+
+    SDL_RenderCopy(renderer, mTexture, NULL, &mRect);
     // SDL_RenderPresent(renderer);
 
 }
