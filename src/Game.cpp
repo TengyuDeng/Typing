@@ -82,6 +82,8 @@ void Game::ProcessInput(){
                 if (event.key.keysym.sym == SDLK_ESCAPE){
                     mIsRunning = false;
                 } else {
+                    
+                    mText->ProcessInput(event.key.keysym.sym);
                 }
                 break;
             // case SDL_KEYUP:
@@ -171,6 +173,7 @@ void Game::UnloadData(){
 
 TTF_Font* Game::GetFont(const std::string& fontName, int ptsize){
     TTF_Font* font = nullptr;
+    // std::string fontFileName = "/Users/dty11/Documents/myGame/res/Fonts/" + fontName;
     std::string fontFileName = "res/Fonts/" + fontName;
     auto iter = mFonts.find(fontFileName);
     // If already in the map, no need to load

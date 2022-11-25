@@ -12,6 +12,12 @@
 #include <string>
 #include "MathUtils.h"
 
+typedef enum {
+    ACTIVE,
+    DEAD,
+    SUCCESS,
+} TextState;
+
 class Text{
 public:
     Text(
@@ -25,26 +31,59 @@ public:
 
     void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
+    void ProcessInput(SDL_Keycode key);
+    class Game* GetGame() const{return mGame;}
+    const Vector2D& GetPosition() const{return mPosition;}
+    void SetState(TextState state){mState = state;}
 
 private:
     class Game* mGame;
-    std::string mTextTyped;
-    std::string mTextRest;
-    SDL_Texture* mTexture;
+    class TextSprite* mTextSprite;
 
     // Position informations
-    SDL_Rect mRect;
+    Vector2D mPosition;
     Vector2D mSpeed;
-    // int mWidth;
-    // int mHeight;
-    // int mPosX;
-    // int mPosY;
-    // float mSpeedX;
-    // float mSpeedY;
 
     // Attribute to check if the text is dead
-    bool mDead;
+    TextState mState;
 
+};
+
+class TextSprite{
+public:
+    TextSprite(
+        class Text* owner, 
+        const std::string& text, 
+        const std::string& fontName, int ptsize, 
+        const SDL_Color& color
+        );
+    ~TextSprite();
+
+    void ProcessInput(SDL_Keycode key);
+    void Draw(SDL_Renderer* renderer);
+
+    int GetWidth() const{return mWidthTyped + mWidthRest;}
+    int GetHeight() const{return mHeight;}
+
+private:
+    SDL_Texture* RenderText(const std::string& text, SDL_Color& color);
+    void UpdateTexture();
+    class Text* mOwner;
+    // Text information
+    std::string mText;
+    int mTypedIdx;
+
+    // Texture information
+    TTF_Font* mFont;
+    SDL_Color mTypedColor;
+    SDL_Color mRestColor;
+    SDL_Texture* mTextureTyped;
+    SDL_Texture* mTextureRest;
+
+    // Texture sizes
+    int mWidthTyped;
+    int mWidthRest;
+    int mHeight;
 };
 
 #endif /* Text_h */
