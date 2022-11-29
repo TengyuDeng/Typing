@@ -1,0 +1,39 @@
+PREFIX := i686-w64-mingw32
+CCPATH := ~/mw32/bin/:
+
+CXX := $(PREFIX)-g++
+CXX_FLAGS := -std=c++17
+
+BIN := bin
+SRC := src
+INCLUDE := include
+
+INCLUDE_PATHS = -I/usr/local/$(PREFIX)/include
+
+CFLAGS = $(shell /usr/local/$(PREFIX)/bin/sdl2-config --cflags) -static-libgcc -static-libstdc++
+
+# LINKER_FLAGS = $(shell /usr/local/$(PREFIX)/bin/sdl2-config --libs) \
+# 	-lSDL2_image -lSDL2_ttf -lSDL2_mixer \
+# 	-Wl,-Bstatic -lwinpthread
+
+
+LINKER_FLAGS = $(shell /usr/local/$(PREFIX)/bin/sdl2-config --static-libs) \
+	/usr/local/$(PREFIX)/lib/libSDL2_image.a \
+	/usr/local/$(PREFIX)/lib/libSDL2_ttf.a \
+	/usr/local/$(PREFIX)/lib/libSDL2_mixer.a \
+	-lusp10 -lgdi32 -lrpcrt4 -lwinmm
+
+EXECUTABLE := myGame-win.exe
+
+all: $(BIN)/$(EXECUTABLE)
+
+run: clean all
+	clear
+	./$(BIN)/$(EXECUTABLE)
+
+$(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $@ -m32 $(INCLUDE_PATHS) $(CFLAGS) $(LINKER_FLAGS)
+
+clean:
+	rm -r $(BIN)/*
+

@@ -129,7 +129,7 @@ void Game::LoadData(){
     // Create the player
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
     SDL_Color black = { 0x00, 0x00, 0x00, 0 };
-    mText = new Text(this, "Windows XP", "mincho.ttc", 24, { 0xFF, 0xFF, 0xFF, 0 });
+    mText = new Text(this, "Windows XP", "Times New Roman.ttf", 24, { 0xFF, 0xFF, 0xFF, 0 });
 }
 
 void Game::UnloadData(){
@@ -173,8 +173,8 @@ void Game::UnloadData(){
 
 TTF_Font* Game::GetFont(const std::string& fontName, int ptsize){
     TTF_Font* font = nullptr;
-    // std::string fontFileName = "/Users/dty11/Documents/myGame/res/Fonts/" + fontName;
-    std::string fontFileName = "res/Fonts/" + fontName;
+    std::string fontFileName = "" + fontName;
+    // std::string fontFileName = "res/Fonts/" + fontName;
     auto iter = mFonts.find(fontFileName);
     // If already in the map, no need to load
     if(iter != mFonts.end()){
