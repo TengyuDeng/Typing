@@ -42,7 +42,12 @@ private:
     bool mIsRunning;
     Uint32 mTicksCount;
     
+    // Game components
     class Text* mText;
+    class Caption* mScoreCaption;
+
+    // Game information
+    int mScore;
 
 };
 

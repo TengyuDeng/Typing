@@ -8,6 +8,7 @@
 
 #include "Game.h"
 #include "Text.h"
+#include "Caption.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -19,7 +20,9 @@ Game::Game()
 mRenderer(nullptr),
 mIsRunning(true),
 mTicksCount(0),
-mText(nullptr){
+mText(nullptr),
+mScoreCaption(nullptr),
+mScore(0){
 
 }
 
@@ -122,14 +125,16 @@ void Game::GenerateOutput(){
     SDL_RenderClear(mRenderer);
     
     mText->Draw(mRenderer);
+    mScoreCaption->Draw(mRenderer);
     SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData(){
-    // Create the player
+    // Create the components
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
-    SDL_Color black = { 0x00, 0x00, 0x00, 0 };
-    mText = new Text(this, "Windows XP", "OxygenMono-Regular.otf", 24, { 0xFF, 0xFF, 0xFF, 0 });
+    SDL_Color green = { 0x00, 0xFF, 0x00, 0 };
+    mText = new Text(this, "Windows XP", "OxygenMono-Regular.otf", 24, white);
+    mScoreCaption = new Caption(this, "Score: ", "OxygenMono-Regular.otf", 24, green, 10, 10);
 }
 
 void Game::UnloadData(){

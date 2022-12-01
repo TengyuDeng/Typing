@@ -19,7 +19,8 @@ Text::Text(
     const SDL_Color& color,
     int x, int y
 ):mGame(game),
-mSpeed(180.0f, 180.0f){
+mSpeed(180.0f, 180.0f),
+mPosition(x, y){
     mTextSprite = new TextSprite(this, text, fontName, ptsize, color);
 }
 
@@ -30,7 +31,7 @@ void Text::Update(float deltaTime){
         mSpeed.x *= -1;
     }
     mPosition.y += static_cast<int>(mSpeed.y * deltaTime);
-    if (mPosition.y < 0 || mPosition.y > 720 - mTextSprite->GetHeight()){
+    if (mPosition.y < 50 || mPosition.y > 720 - mTextSprite->GetHeight()){
         mSpeed.y *= -1;
         // SetState(DEAD);
     }

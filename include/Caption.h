@@ -1,90 +1,72 @@
 //
-//  Text.h
+//  Caption.h
 //  myGame
 //
-//  Created by Deng Tengyu on 2022/11/23.
+//  Created by Deng Tengyu on 2022/12/01.
 //  Copyright © 2022 Deng Tengyu. All rights reserved.
 //
 
-#ifndef Text_h
-#define Text_h
+#ifndef Caption_h
+#define Caption_h
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
 #include "MathUtils.h"
 
-typedef enum {
-    ACTIVE,
-    DEAD,
-    SUCCESS,
-} TextState;
-
-class Text{
+class Caption{
 public:
-    Text(
+    Caption(
         class Game* game, 
         const std::string& text, 
         const std::string& fontName, int ptsize, 
         const SDL_Color& color,
-        int x = 360, int y = 50
+        int x = 10, int y = 10
     );
-    ~Text();
-
-    void Update(float deltaTime);
+    ~Caption();
+    
+    void SetText(const std::string& text);
     void Draw(SDL_Renderer* renderer);
-    void ProcessInput(SDL_Keycode key);
     class Game* GetGame() const{return mGame;}
     const Vector2D& GetPosition() const{return mPosition;}
-    void SetState(TextState state){mState = state;}
 
 private:
     class Game* mGame;
-    class TextSprite* mTextSprite;
+    class CaptionSprite* mCaptionSprite;
 
-    // Position informations
+    // Position information
     Vector2D mPosition;
-    Vector2D mSpeed;
-
-    // Attribute to check if the text is dead
-    TextState mState;
 
 };
 
-class TextSprite{
+class CaptionSprite{
 public:
-    TextSprite(
-        class Text* owner, 
+    CaptionSprite(
+        class Caption* owner, 
         const std::string& text, 
         const std::string& fontName, int ptsize, 
         const SDL_Color& color
         );
-    ~TextSprite();
+    ~CaptionSprite();
 
-    void ProcessInput(SDL_Keycode key);
     void Draw(SDL_Renderer* renderer);
-
-    int GetWidth() const{return mWidthTyped + mWidthRest;}
+    void SetText(const std::string& text);
+    int GetWidth() const{return mWidth;}
     int GetHeight() const{return mHeight;}
 
 private:
     SDL_Texture* RenderText(const std::string& text, SDL_Color& color);
-    void UpdateTexture();
-    class Text* mOwner;
+    class Caption* mOwner;
     // Text information
     std::string mText;
-    int mTypedIdx;
 
     // Texture information
     TTF_Font* mFont;
-    SDL_Color mTypedColor;
-    SDL_Color mRestColor;
-    SDL_Texture* mTextureTyped;
-    SDL_Texture* mTextureRest;
+    SDL_Color mColor;
+    SDL_Texture* mTexture;
 
     // Texture sizes
-    int mWidthTyped;
-    int mWidthRest;
+    int mWidth;
     int mHeight;
 };
 
-#endif /* Text_h */
+#endif /* Caption_h */
