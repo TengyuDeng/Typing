@@ -129,7 +129,7 @@ void Game::LoadData(){
     // Create the player
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
     SDL_Color black = { 0x00, 0x00, 0x00, 0 };
-    mText = new Text(this, "Windows XP", "Times New Roman.ttf", 24, { 0xFF, 0xFF, 0xFF, 0 });
+    mText = new Text(this, "Windows XP", "OxygenMono-Regular.otf", 24, { 0xFF, 0xFF, 0xFF, 0 });
 }
 
 void Game::UnloadData(){
