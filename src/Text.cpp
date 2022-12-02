@@ -68,7 +68,8 @@ mTypedColor(color),
 mText(text),
 mTypedIdx(0),
 mWidthTyped(0),
-mTextureTyped(nullptr){
+mTextureTyped(nullptr),
+mTextureRest(nullptr){
     // The color of the rest text is more transparent
     mRestColor = mTypedColor;
     mRestColor.a = 0x80;
@@ -133,17 +134,24 @@ void TextSprite::UpdateTexture() {
     // Called when mTypedIdx changed
     // Update mTextureTyped, mTextureRest, and mWidthTyped, mWidthRest
     if (mTypedIdx > 0) {
-        SDL_DestroyTexture(mTextureTyped);
+        if (mTextureTyped) {
+            SDL_DestroyTexture(mTextureTyped);
+        }
         mTextureTyped = RenderText(mText.substr(0, mTypedIdx), mTypedColor);
         SDL_QueryTexture(mTextureTyped, NULL, NULL, &mWidthTyped, &mHeight);
     }
     if (mTypedIdx < mText.size()) {
-        SDL_DestroyTexture(mTextureRest);
+        if (mTextureRest) {
+            SDL_DestroyTexture(mTextureRest);
+        }
         mTextureRest = RenderText(mText.substr(mTypedIdx), mRestColor);
         SDL_QueryTexture(mTextureRest, NULL, NULL, &mWidthRest, &mHeight);
     } else if (mTypedIdx == mText.size()) {
-        SDL_DestroyTexture(mTextureRest);
-        mTextureRest = nullptr;
+        if (mTextureRest) {
+            SDL_DestroyTexture(mTextureRest);
+            mTextureRest = nullptr;
+        }
+        
         mWidthRest = 0;
         mOwner->SetState(SUCCESS);
     }

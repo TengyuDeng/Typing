@@ -34,7 +34,7 @@ bool Game::Initialize(){
         return false;
     }
 
-    mWindow = SDL_CreateWindow("Test!", 100, 100, 960, 720, 0);
+    mWindow = SDL_CreateWindow("Typing!", 100, 100, 960, 720, 0);
     if (!mWindow){
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
