@@ -17,9 +17,11 @@ Caption::Caption(
     const std::string& text, 
     const std::string& fontName, int ptsize, 
     const SDL_Color& color,
-    int x, int y
+    int x, int y,
+    bool isVisible
 ):mGame(game),
-mPosition(x, y){
+mPosition(x, y),
+mIsVisible(isVisible){
     mCaptionSprite = new CaptionSprite(this, text, fontName, ptsize, color);
 }
 
@@ -28,8 +30,17 @@ void Caption::SetText(const std::string& text){
 }
 
 void Caption::Draw(SDL_Renderer* renderer){
-    mCaptionSprite->Draw(renderer);
+    if (mIsVisible){
+        mCaptionSprite->Draw(renderer);
+    }
 }
+
+int Caption::GetWidth() const{
+    return mCaptionSprite->GetWidth();
+    }
+int Caption::GetHeight() const{
+    return mCaptionSprite->GetHeight();
+    }
 
 CaptionSprite::CaptionSprite(
     class Caption* owner, 

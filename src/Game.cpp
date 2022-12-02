@@ -7,7 +7,7 @@
 //
 
 #include "Game.h"
-#include "Text.h"
+#include "TextSet.h"
 #include "Caption.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -20,7 +20,7 @@ Game::Game()
 mRenderer(nullptr),
 mIsRunning(true),
 mTicksCount(0),
-mText(nullptr),
+mTextSet(nullptr),
 mScoreCaption(nullptr),
 mScore(0){
 
@@ -86,7 +86,7 @@ void Game::ProcessInput(){
                     mIsRunning = false;
                 } else {
                     
-                    mText->ProcessInput(event.key.keysym.sym);
+                    mTextSet->ProcessInput(event.key.keysym.sym);
                 }
                 break;
             // case SDL_KEYUP:
@@ -114,18 +114,25 @@ void Game::UpdateGame(){
         deltaTime = 0.05f;
     }
     mTicksCount = SDL_GetTicks();
+    if (mTextSet->GetSize() == 0){
+        mEndCaption->SetVisible(true);
+        mScoreCaption->SetText("Score: " + std::to_string(mScore));
+    } else {
+        // Update the text object
+        mTextSet->Update(deltaTime);
+        // Update the score
+        mScoreCaption->SetText("Score: " + std::to_string(mScore));
+    }
     
-    // Update the text object
-    mText->Update(deltaTime);
-
 }
 
 void Game::GenerateOutput(){
     SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(mRenderer);
     
-    mText->Draw(mRenderer);
+    mTextSet->Draw(mRenderer);
     mScoreCaption->Draw(mRenderer);
+    mEndCaption->Draw(mRenderer);
     SDL_RenderPresent(mRenderer);
 }
 
@@ -133,59 +140,30 @@ void Game::LoadData(){
     // Create the components
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
     SDL_Color green = { 0x00, 0xFF, 0x00, 0 };
-    mText = new Text(this, "Windows XP", "OxygenMono-Regular.otf", 24, white);
+    mTextSet = new TextSet(this, {"Windows XP"}, "OxygenMono-Regular.otf", 24, white);
     mScoreCaption = new Caption(this, "Score: ", "OxygenMono-Regular.otf", 24, green, 10, 10);
+    mEndCaption = new Caption(this, "GAME OVER!", "OxygenMono-Regular.otf", 60, white, 480, 360, false);
+    mEndCaption->SetPosition(480 - mEndCaption->GetWidth() / 2, 360 - mEndCaption->GetHeight() / 2);
 }
 
 void Game::UnloadData(){
-    // for (auto i: mTextures){
-    //     SDL_DestroyTexture(i.second);
-    // }
-    // mTextures.clear();
+
     for (auto i: mFonts){
         TTF_CloseFont(i.second);
     }
     mFonts.clear();
 }
 
-// SDL_Texture* Game::GetTexture(const std::string& fileName){
-//     SDL_Texture* tex = nullptr;
-//     // Is the texture alread in the map?
-//     auto iter = mTextures.find(fileName);
-//     if(iter != mTextures.end()){
-//         tex = iter->second;
-//     } else{
-//         // Load from file
-//         SDL_Surface* surf = IMG_Load(fileName.c_str());
-//         if (!surf){
-//             SDL_Log("Failed to load texture file %s", fileName.c_str());
-//             return nullptr;
-//         }
-
-//         //Create texture from surface
-//         tex = SDL_CreateTextureFromSurface(mRenderer, surf);
-//         SDL_FreeSurface(surf);
-//         if (!tex){
-//             SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
-//             return nullptr;
-//         }
-
-//         // Add to map
-//         mTextures.emplace(fileName.c_str(), tex);
-//     }
-//     return tex;
-// }
 
 TTF_Font* Game::GetFont(const std::string& fontName, int ptsize){
     TTF_Font* font = nullptr;
+    std::string key = fontName + std::to_string(ptsize);
     std::string fontFileName = "" + fontName;
     // std::string fontFileName = "res/Fonts/" + fontName;
-    auto iter = mFonts.find(fontFileName);
+    auto iter = mFonts.find(key);
     // If already in the map, no need to load
     if(iter != mFonts.end()){
-        font = iter->second;
-        TTF_SetFontSize(font, ptsize);
-        
+        font = iter->second;        
     } else{
         // Load from file
         font = TTF_OpenFont(fontFileName.c_str(), ptsize);

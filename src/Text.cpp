@@ -6,35 +6,44 @@
 //  Copyright © 2022 Deng Tengyu. All rights reserved.
 //
 
-#include "Game.h"
 #include "Text.h"
+#include "TextSet.h"
+#include "Game.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <cctype>
 
 Text::Text(
-    class Game* game, 
+    class TextSet* textset, 
     const std::string& text, 
     const std::string& fontName, int ptsize, 
     const SDL_Color& color,
     int x, int y
-):mGame(game),
+):mTextSet(textset),
 mSpeed(180.0f, 180.0f),
-mPosition(x, y){
+mPosition(x, y),
+mState(ACTIVE){
     mTextSprite = new TextSprite(this, text, fontName, ptsize, color);
 }
 
+Text::~Text(){
+    // Remove the text from the textset when deleted
+    mTextSet->RemoveText(this);
+}
 
 void Text::Update(float deltaTime){
+    // Update the position
     mPosition.x += static_cast<int>(mSpeed.x * deltaTime);
     if (mPosition.x < 0 || mPosition.x > 960 - mTextSprite->GetWidth()){
         mSpeed.x *= -1;
     }
     mPosition.y += static_cast<int>(mSpeed.y * deltaTime);
-    if (mPosition.y < 50 || mPosition.y > 720 - mTextSprite->GetHeight()){
+    if (mPosition.y < 50){
         mSpeed.y *= -1;
-        // SetState(DEAD);
     }
+    if (mPosition.y > 720 - mTextSprite->GetHeight()){
+        SetState(DEAD);
+    }  
 }
 
 void Text::Draw(SDL_Renderer* renderer){
@@ -44,6 +53,10 @@ void Text::Draw(SDL_Renderer* renderer){
 void Text::ProcessInput(SDL_Keycode key){
     mTextSprite->ProcessInput(key);
 }
+
+class Game* Text::GetGame() const{
+    return mTextSet->GetGame();
+    }
 
 TextSprite::TextSprite(
     class Text* owner, 

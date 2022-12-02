@@ -25,6 +25,8 @@ public:
     // SDL_Texture* GetTexture(const std::string& fileName);
     TTF_Font* GetFont(const std::string& fontFileName, int ptsize);
     SDL_Texture* GetTextureFromSurface(SDL_Surface* surf);
+    int GetScore() const{return mScore;}
+    void AddScore(int score) {mScore += score;}
 
 private:
     void ProcessInput();
@@ -43,8 +45,9 @@ private:
     Uint32 mTicksCount;
     
     // Game components
-    class Text* mText;
+    class TextSet* mTextSet;
     class Caption* mScoreCaption;
+    class Caption* mEndCaption;
 
     // Game information
     int mScore;

@@ -20,7 +20,8 @@ public:
         const std::string& text, 
         const std::string& fontName, int ptsize, 
         const SDL_Color& color,
-        int x = 10, int y = 10
+        int x = 10, int y = 10,
+        bool isVisible = true
     );
     ~Caption();
     
@@ -28,6 +29,11 @@ public:
     void Draw(SDL_Renderer* renderer);
     class Game* GetGame() const{return mGame;}
     const Vector2D& GetPosition() const{return mPosition;}
+    void SetPosition(float x, float y){mPosition.x = x; mPosition.y = y;}
+    void SetVisible(bool isVisible){mIsVisible = isVisible;}
+    int GetWidth() const;
+    int GetHeight() const;
+    
 
 private:
     class Game* mGame;
@@ -35,6 +41,7 @@ private:
 
     // Position information
     Vector2D mPosition;
+    bool mIsVisible;
 
 };
 

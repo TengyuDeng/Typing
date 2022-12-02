@@ -22,7 +22,7 @@ typedef enum {
 class Text{
 public:
     Text(
-        class Game* game, 
+        class TextSet* textset, 
         const std::string& text, 
         const std::string& fontName, int ptsize, 
         const SDL_Color& color,
@@ -33,12 +33,14 @@ public:
     void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
     void ProcessInput(SDL_Keycode key);
-    class Game* GetGame() const{return mGame;}
+    class Game* GetGame() const;
     const Vector2D& GetPosition() const{return mPosition;}
     void SetState(TextState state){mState = state;}
+    TextState GetState() const{return mState;}
 
 private:
-    class Game* mGame;
+    // class Game* mGame;
+    class TextSet* mTextSet;
     class TextSprite* mTextSprite;
 
     // Position informations
