@@ -95,6 +95,9 @@ void TextSprite::ProcessInput(SDL_Keycode key){
         if (std::tolower(mText[mTypedIdx]) == key){
             mTypedIdx++;
             UpdateTexture();
+        } else{
+            mTypedIdx = 0;
+            UpdateTexture();
         }
     }
     
@@ -133,25 +136,32 @@ SDL_Texture* TextSprite::RenderText(const std::string& text, SDL_Color& color){
 void TextSprite::UpdateTexture() {
     // Called when mTypedIdx changed
     // Update mTextureTyped, mTextureRest, and mWidthTyped, mWidthRest
-    if (mTypedIdx > 0) {
-        if (mTextureTyped) {
-            SDL_DestroyTexture(mTextureTyped);
-        }
+    
+    // Destroy the old typed texture
+    if (mTextureTyped) {
+        SDL_DestroyTexture(mTextureTyped);
+    }
+    // If mTypedIdx is 0, no typed texture to render
+    // else create the typed texture
+    if (mTypedIdx == 0) {
+        mTextureTyped = nullptr;
+        mWidthTyped = 0;
+    } else {
         mTextureTyped = RenderText(mText.substr(0, mTypedIdx), mTypedColor);
         SDL_QueryTexture(mTextureTyped, NULL, NULL, &mWidthTyped, &mHeight);
     }
+    
+    // Destroy the old rest texture
+    if (mTextureRest) {
+        SDL_DestroyTexture(mTextureRest);
+    }
+    // If mTypedIdx is at the end, create the rest texture
+    // else set the state to SUCCESS
     if (mTypedIdx < mText.size()) {
-        if (mTextureRest) {
-            SDL_DestroyTexture(mTextureRest);
-        }
         mTextureRest = RenderText(mText.substr(mTypedIdx), mRestColor);
         SDL_QueryTexture(mTextureRest, NULL, NULL, &mWidthRest, &mHeight);
-    } else if (mTypedIdx == mText.size()) {
-        if (mTextureRest) {
-            SDL_DestroyTexture(mTextureRest);
-            mTextureRest = nullptr;
-        }
-        
+    } else {
+        mTextureRest = nullptr;        
         mWidthRest = 0;
         mOwner->SetState(SUCCESS);
     }
