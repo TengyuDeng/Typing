@@ -42,7 +42,8 @@ void Text::Update(float deltaTime){
         mSpeed.y *= -1;
     }
     if (mPosition.y > 720 - mTextSprite->GetHeight()){
-        SetState(DEAD);
+        mSpeed.y *= -1;
+        // SetState(DEAD);
     }  
 }
 

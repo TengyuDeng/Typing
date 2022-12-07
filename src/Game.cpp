@@ -140,7 +140,9 @@ void Game::LoadData(){
     // Create the components
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
     SDL_Color green = { 0x00, 0xFF, 0x00, 0 };
-    mTextSet = new TextSet(this, {"Windows XP"}, "OxygenMono-Regular.otf", 24, white);
+    std::vector<std::string> textlist = {"WindowsXP", "macOS", "this", "game"};
+    std::vector<std::vector<int>> positionlist = {{360, 50}, {360, 150}, {660, 50}, {660, 150}, {660, 300}};
+    mTextSet = new TextSet(this, textlist, positionlist, "OxygenMono-Regular.otf", 24, white);
     mScoreCaption = new Caption(this, "Score: ", "OxygenMono-Regular.otf", 24, green, 10, 10);
     mEndCaption = new Caption(this, "GAME OVER!", "OxygenMono-Regular.otf", 60, white, 480, 360, false);
     mEndCaption->SetPosition(480 - mEndCaption->GetWidth() / 2, 360 - mEndCaption->GetHeight() / 2);

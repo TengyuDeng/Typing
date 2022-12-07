@@ -16,12 +16,13 @@
 
 TextSet::TextSet(
     class Game* game,
-    std::vector<std::string> textList,
+    std::vector<std::string>& textList,
+    std::vector<std::vector<int>>& positionList,
     const std::string& fontName, int ptsize,
     const SDL_Color& color
 ):mGame(game){
-    for (auto text : textList){
-        mTextList.emplace_back(new Text(this, text, fontName, ptsize, color));
+    for (int i = 0; i < textList.size(); i++){
+        mTextList.emplace_back(new Text(this, textList[i], fontName, ptsize, color, positionList[i][0], positionList[i][1]));
     }
 }
 

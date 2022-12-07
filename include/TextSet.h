@@ -16,7 +16,8 @@ class TextSet{
 public:
     TextSet(
         class Game* game,
-        std::vector<std::string> textList,
+        std::vector<std::string>& textList,
+        std::vector<std::vector<int>>& positionList,
         const std::string& fontName, int ptsize,
         const SDL_Color& color
     );
