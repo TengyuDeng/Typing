@@ -26,7 +26,8 @@ public:
         const std::string& text, 
         const std::string& fontName, int ptsize, 
         const SDL_Color& color,
-        int x = 360, int y = 50
+        int x = 360, int y = 50,
+        float speedX = 180.0f, float speedY = 180.0f
     );
     ~Text();
 

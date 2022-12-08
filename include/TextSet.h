@@ -38,10 +38,10 @@ private:
     int mPtsize;
     SDL_Color mColor;
     std::vector<std::string> mTextAvailableList = {
-        "WindowsXP", "macOS", "Cpp", "Kyoto", "Demachiyanagi",
+        "WindowsXP", "macOS", "Cpp", "Kyoutou", "Demachiyanagi",
         "Higashiyama", "Imadegawa", "Kawaramachimarutamachi", 
         "Oosaka", "Keihan", "Hankyuu", "Hanshin", 
-        "Nankai", "Kintetsu","JR",  "Tokaidou",
+        "Nankai", "Kintetsu","JR",  "Toukaidou",
         };
     std::vector<std::string> mTextInUseList = {};
 

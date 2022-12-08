@@ -104,7 +104,7 @@ void TextSet::GenerateText(){
     std::uniform_int_distribution<int> dist(0, mTextAvailableList.size() - 1);
     int index = dist(mt);
     std::string text = mTextAvailableList[index];
-    std::uniform_int_distribution<int> distX(0, 960 - 50 * text.size());
+    std::uniform_int_distribution<int> distX(20, 960 - 10 * text.size());
     std::uniform_int_distribution<int> distY(100, 720 - 100);
     int x = distX(mt);
     int y = distY(mt);

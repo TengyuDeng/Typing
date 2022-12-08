@@ -18,9 +18,10 @@ Text::Text(
     const std::string& text, 
     const std::string& fontName, int ptsize, 
     const SDL_Color& color,
-    int x, int y
+    int x, int y,
+    float speedX, float speedY
 ):mTextSet(textset),
-mSpeed(180.0f, 180.0f),
+mSpeed(speedX, speedY),
 mPosition(x, y),
 mState(ACTIVE){
     mTextSprite = new TextSprite(this, text, fontName, ptsize, color);
@@ -34,14 +35,21 @@ Text::~Text(){
 void Text::Update(float deltaTime){
     // Update the position
     mPosition.x += static_cast<int>(mSpeed.x * deltaTime);
-    if (mPosition.x < 0 || mPosition.x > 960 - mTextSprite->GetWidth()){
+    if (mPosition.x < 0){
+        mPosition.x = 0;
+        mSpeed.x *= -1;
+    }
+    if (mPosition.x > 960 - mTextSprite->GetWidth()) {
+        mPosition.x = 960 - mTextSprite->GetWidth();
         mSpeed.x *= -1;
     }
     mPosition.y += static_cast<int>(mSpeed.y * deltaTime);
     if (mPosition.y < 50){
+        mPosition.y = 50;
         mSpeed.y *= -1;
     }
     if (mPosition.y > 720 - mTextSprite->GetHeight()){
+        mPosition.y = 720 - mTextSprite->GetHeight();
         mSpeed.y *= -1;
         // SetState(DEAD);
     }  
