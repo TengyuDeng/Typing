@@ -37,6 +37,7 @@ public:
     const Vector2D& GetPosition() const{return mPosition;}
     void SetState(TextState state){mState = state;}
     TextState GetState() const{return mState;}
+    std::string GetText() const;
 
 private:
     // class Game* mGame;
@@ -67,6 +68,7 @@ public:
 
     int GetWidth() const{return mWidthTyped + mWidthRest;}
     int GetHeight() const{return mHeight;}
+    std::string GetText() const{return mText;}
 
 private:
     SDL_Texture* RenderText(const std::string& text, SDL_Color& color);

@@ -16,10 +16,9 @@ class TextSet{
 public:
     TextSet(
         class Game* game,
-        std::vector<std::string>& textList,
-        std::vector<std::vector<int>>& positionList,
         const std::string& fontName, int ptsize,
-        const SDL_Color& color
+        const SDL_Color& color,
+        int num = 8
     );
     ~TextSet();
 
@@ -31,8 +30,20 @@ public:
     void RemoveText(class Text* text);
 
 private:
+    void GenerateText();
     class Game* mGame;
+    int mNumTexts;
     std::vector<class Text*> mTextList;
+    std::string mFontName;
+    int mPtsize;
+    SDL_Color mColor;
+    std::vector<std::string> mTextAvailableList = {
+        "WindowsXP", "macOS", "Cpp", "Kyoto", "Demachiyanagi",
+        "Higashiyama", "Imadegawa", "Kawaramachimarutamachi", 
+        "Oosaka", "Keihan", "Hankyuu", "Hanshin", 
+        "Nankai", "Kintetsu","JR",  "Tokaidou",
+        };
+    std::vector<std::string> mTextInUseList = {};
 
 };
 

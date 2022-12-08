@@ -13,16 +13,21 @@
 #include <SDL2/SDL_ttf.h>
 #include <vector>
 #include <algorithm>
+#include <random>
 
 TextSet::TextSet(
     class Game* game,
-    std::vector<std::string>& textList,
-    std::vector<std::vector<int>>& positionList,
     const std::string& fontName, int ptsize,
-    const SDL_Color& color
-):mGame(game){
-    for (int i = 0; i < textList.size(); i++){
-        mTextList.emplace_back(new Text(this, textList[i], fontName, ptsize, color, positionList[i][0], positionList[i][1]));
+    const SDL_Color& color,
+    int num
+):mGame(game),
+mFontName(fontName),
+mPtsize(ptsize),
+mColor(color),
+mNumTexts(num){
+    // Generate initial texts
+    for (int i = 0; i < mNumTexts; i++){
+        GenerateText();
     }
 }
 
@@ -34,6 +39,9 @@ TextSet::~TextSet(){
 
 void TextSet::Update(float deltaTime){
     // Generate new texts
+    if (mTextList.size() < mNumTexts){
+        GenerateText();
+        }
     // Update all the texts
     std::vector<class Text*> TextsToRemove;
     for (auto text : mTextList){
@@ -70,6 +78,15 @@ void TextSet::ProcessInput(SDL_Keycode key){
 }
 
 void TextSet::RemoveText(class Text* text){
+    // Remove the text from mTextInUseList
+    // and add to mTextAvailableList
+    std::string text_content = text->GetText();
+    mTextInUseList.erase(
+            std::remove(
+                mTextInUseList.begin(), mTextInUseList.end(), text_content
+            ), 
+            mTextInUseList.end()
+        );
     // Remove the text from mTextList
     mTextList.erase(
             std::remove(
@@ -77,4 +94,23 @@ void TextSet::RemoveText(class Text* text){
             ), 
             mTextList.end()
         );
+    mTextAvailableList.emplace_back(text_content);
+}
+
+void TextSet::GenerateText(){
+    // Randomly select a text from mTextAvailableList, and generate a new text at random position
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> dist(0, mTextAvailableList.size() - 1);
+    int index = dist(mt);
+    std::string text = mTextAvailableList[index];
+    std::uniform_int_distribution<int> distX(0, 960 - 50 * text.size());
+    std::uniform_int_distribution<int> distY(100, 720 - 100);
+    int x = distX(mt);
+    int y = distY(mt);
+    mTextList.emplace_back(new Text(this, text, mFontName, mPtsize, mColor, x, y));
+    // Remove the text from mTextAvailableList
+    // and add to mTextInUseList
+    mTextAvailableList.erase(mTextAvailableList.begin() + index);
+    mTextInUseList.emplace_back(text);
 }

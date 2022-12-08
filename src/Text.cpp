@@ -59,6 +59,10 @@ class Game* Text::GetGame() const{
     return mTextSet->GetGame();
     }
 
+std::string Text::GetText() const{
+    return mTextSprite->GetText();
+}
+
 TextSprite::TextSprite(
     class Text* owner, 
     const std::string& text, 
