@@ -18,7 +18,7 @@ public:
         class Game* game,
         const std::string& fontName, int ptsize,
         const SDL_Color& color,
-        int num = 8
+        int numTexts = 15
     );
     ~TextSet();
 
@@ -42,6 +42,9 @@ private:
         "Higashiyama", "Imadegawa", "Kawaramachimarutamachi", 
         "Oosaka", "Keihan", "Hankyuu", "Hanshin", 
         "Nankai", "Kintetsu","JR",  "Toukaidou",
+        "foo", "bar", "hogehoge", "fugafuga",
+        "this", "that", "good", "bonus",
+        "hello", "world", "apple", "banana"
         };
     std::vector<std::string> mTextInUseList = {};
 

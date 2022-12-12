@@ -19,12 +19,12 @@ TextSet::TextSet(
     class Game* game,
     const std::string& fontName, int ptsize,
     const SDL_Color& color,
-    int num
+    int numTexts
 ):mGame(game),
 mFontName(fontName),
 mPtsize(ptsize),
 mColor(color),
-mNumTexts(num){
+mNumTexts(numTexts){
     // Generate initial texts
     for (int i = 0; i < mNumTexts; i++){
         GenerateText();
@@ -106,9 +106,12 @@ void TextSet::GenerateText(){
     std::string text = mTextAvailableList[index];
     std::uniform_int_distribution<int> distX(20, 960 - 10 * text.size());
     std::uniform_int_distribution<int> distY(100, 720 - 100);
+    std::uniform_real_distribution<float> distSpeed(100.0f, 300.0f);
     int x = distX(mt);
     int y = distY(mt);
-    mTextList.emplace_back(new Text(this, text, mFontName, mPtsize, mColor, x, y));
+    float speedX = distSpeed(mt);
+    float speedY = distSpeed(mt);
+    mTextList.emplace_back(new Text(this, text, mFontName, mPtsize, mColor, x, y, speedX, speedY));
     // Remove the text from mTextAvailableList
     // and add to mTextInUseList
     mTextAvailableList.erase(mTextAvailableList.begin() + index);
