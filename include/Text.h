@@ -39,6 +39,7 @@ public:
     void SetState(TextState state){mState = state;}
     TextState GetState() const{return mState;}
     std::string GetText() const;
+    void Reset();
 
 private:
     // class Game* mGame;
@@ -70,6 +71,7 @@ public:
     int GetWidth() const{return mWidthTyped + mWidthRest;}
     int GetHeight() const{return mHeight;}
     std::string GetText() const{return mText;}
+    void Reset();
 
 private:
     SDL_Texture* RenderText(const std::string& text, SDL_Color& color);

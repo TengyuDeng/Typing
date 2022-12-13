@@ -95,6 +95,10 @@ void TextSet::RemoveText(class Text* text){
             mTextList.end()
         );
     mTextAvailableList.emplace_back(text_content);
+    // When a text is removed, reset all other texts
+    for (auto text : mTextList){
+        text->Reset();
+    }
 }
 
 void TextSet::GenerateText(){

@@ -71,6 +71,12 @@ std::string Text::GetText() const{
     return mTextSprite->GetText();
 }
 
+void Text::Reset(){
+    // Reset the text to the initial state
+    mState = ACTIVE;
+    mTextSprite->Reset();
+}
+
 TextSprite::TextSprite(
     class Text* owner, 
     const std::string& text, 
@@ -179,4 +185,10 @@ void TextSprite::UpdateTexture() {
         mOwner->SetState(SUCCESS);
     }
 
+}
+
+void TextSprite::Reset(){
+    // Reset the text to the beginning
+    mTypedIdx = 0;
+    UpdateTexture();
 }
