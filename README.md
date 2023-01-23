@@ -1,3 +1,5 @@
-*a simple typing game*
+**A Simple Typing Game**
 
-The font file is from https://www.fontsquirrel.com/fonts/oxygen-mono
+[playing demo](https://tengyudeng.github.io/typing-demo/)
+
+The font file is from [here](https://www.fontsquirrel.com/fonts/oxygen-mono).
